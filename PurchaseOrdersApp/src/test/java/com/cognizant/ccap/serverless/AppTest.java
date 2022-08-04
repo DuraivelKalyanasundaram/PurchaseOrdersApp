@@ -12,6 +12,6 @@ public class AppTest {
   public void successfulResponse() throws ParseException {
     App app = new App();
     LambdaResponse result = app.handleRequest(null, null);
-    assertEquals("Hello World - CCAP Generated Lambda function", result.getBody());
+    assertEquals("Purchase Order - Received", result.getBody());
   }
 }
