@@ -75,6 +75,7 @@ pipeline {
         }
       }
       steps {
+        sh 'curl -I https://repo.maven.apache.org/maven2/'
         sh 'sam build --template ${SAM_TEMPLATE} --use-container'
         withAWS(
             credentials: env.PIPELINE_USER_CREDENTIAL_ID,
