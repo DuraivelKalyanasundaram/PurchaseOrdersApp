@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Cognizant Cloud Acceleration Platform Generated AWS Lambda Function for PurchaseOrdersApp
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 60
+    
+Resources:
+  CCAPDynamoDBTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: orders # table name must be given here
+      PrimaryKey:  # Primary/Partition key details must be given here
+        Name: id
+        Type: String
+      ProvisionedThroughput:  # Provisioned throughput details must be given here
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  CCAPHOMEAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      EndpointConfiguration: REGIONAL
+      
+      
+      Domain:
+        DomainName: ccap-orders.cloudsprint.io
+        CertificateArn: arn:aws:acm:ap-southeast-1:161342106387:certificate/b6e82f83-7e4f-4cac-aff7-ce3d2185159b
+        EndpointConfiguration: REGIONAL 
+        Route53: 
+          HostedZoneId: Z2X2JW37OBRU4C
+      
+  CCAPLambda:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: PurchaseOrdersApp
+      Handler: com.cognizant.ccap.serverless.App::handleRequest
+      Runtime: java8.al2
+      MemorySize: 512
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref CCAPDynamoDBTable
+      Events:
+        CCAPAPI1:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /home
+            Method: post
+            RestApiId:
+              Ref: CCAPHOMEAPI
+      
+
+Outputs:
+  CCAPGeneratedAPI:
+    Description: "API Gateway endpoint URL for Prod stage for CCAP Generated /home API"
+    Value: !Sub "https://ccap-orders.cloudsprint.io/home"
+  CCAPLambda:
+    Description: "CCAP Generated Hello World Lambda Function ARN"
+    Value: !GetAtt CCAPLambda.Arn
+  CCAPLambdaIamRole:
+    Description: "Implicit IAM Role created for CCAP Generated Hello World function"
+    Value: !GetAtt CCAPLambdaRole.Arn
+  
+  CCAPDynamoDBTable:
+    Description: "CCAP Generated Dynamodb Table Arn"
+    Value: !GetAtt CCAPDynamoDBTable.Arn

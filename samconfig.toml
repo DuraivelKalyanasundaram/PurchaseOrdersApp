@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "PurchaseOrdersApp"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-t0rwrjeznf0t"
+s3_prefix = "PurchaseOrdersApp"
+region = "ap-southeast-1"
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+image_repositories = []
