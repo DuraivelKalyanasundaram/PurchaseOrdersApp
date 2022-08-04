@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    PIPELINE_USER_CREDENTIAL_ID = 'fegoservice'
+    PIPELINE_USER_CREDENTIAL_ID = 'AKIASLEF5FMJ2FMWXIYZ'
     SAM_TEMPLATE = 'template.yaml'
     MAIN_BRANCH = 'master'
     TESTING_STACK_NAME = 'purchase-orders-dev'
